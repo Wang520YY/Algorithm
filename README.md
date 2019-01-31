@@ -519,10 +519,8 @@ Given s = "leetcode", return "leotcede".
 
 使用双指针，指向待反转的两个元音字符，一个指针从头向尾遍历，一个指针从尾到头遍历。
 
-```java
-private HashSet<Character> vowels = new HashSet<>(Arrays.asList('a','e','i','o','u','A','E','I','O','U'));
-
-public String reverseVowels(String s) {
+```php
+public function reverseVowels($S) {
     $vowels = ['a', 'e', 'i', 'o', 'u'];
     $i = 0;
     $j = strlen($S) - 1;
@@ -580,27 +578,25 @@ Explanation: You could delete the character 'c'.
 
 题目描述：字符串可以删除一个字符，判断是否能构成回文字符串。
 
-```java
-public boolean validPalindrome(String s) {
-    int i = 0, j = s.length() -1;
-    while(i < j){
-        if(s.charAt(i) != s.charAt(j)){
-            return isPalindrome(s, i, j - 1) || isPalindrome(s, i + 1, j);
-        }
-        i++;
-        j--;
-    }
-    return true;
-}
-
-private boolean isPalindrome(String s, int l, int r){
-    while(l < r){
-        if(s.charAt(l) != s.charAt(r))
-            return false;
-        l++;
-        r--;
-    }
-    return true;
+```php
+public function validPalindrome($s) 
+{
+     $i = $times = 0;
+     $j = strlen($s);
+     while($i <= $j) {
+         if($s[$i] != $s[$j]) {
+             if($times == 1) return false;
+             if($s[$i+1] . $s[$i+2] != $s[$j] . $s[$j-1]) {
+                  $j--;
+             } else {
+                  $i++;
+             }
+             $times++;
+         }
+         $i++;
+         $j--;
+     }
+     return ture;
 }
 ```
 
