@@ -287,17 +287,25 @@ public int findMinArrowShots(int[][] points) {
 
 [Leetcode : 122. Best Time to Buy and Sell Stock II (Easy)](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/description/)
 
+```
+Input:
+[1,3,3,6]
+
+Output:
+5
+```
+
 题目描述：一次交易包含买入和卖出，多个交易之间不能交叉进行。
 
-对于 [a, b, c, d]，如果有 a <= b <= c <= d ，那么最大收益为 d - a。而 d - a = (d - c) + (c - b) + (b - a) ，因此当访问到一个 prices[i] 且 prices[i] - prices[i-1] > 0，那么就把 prices[i] - prices[i-1] 添加加到收益中，从而在局部最优的情况下也保证全局最优。
+对于 [a, b, c, d]，如果有 a <= b <= c <= d ，那么最大收益为 d - a。而 d - a = (d - c) + (c - b) + (b - a) ，因此当访问到一个 prices[i] 且 prices[i] - prices[i-1] > 0，那么就把 prices[i] - prices[i-1] 添加加到收益中
+解题思路：局部最优的情况下也保证全局最优。
 
-```java
-public int maxProfit(int[] prices) {
-    int profit = 0;
-    for(int i = 1; i < prices.length; i++){
-        if(prices[i] > prices[i-1]) profit += (prices[i] - prices[i-1]);
+```php
+public function maxProfit($prices) {
+    $maxIncome = 0;
+    for($i = 1; $i < count($prices); $i++) {
+         $maxIncome += $prices[$i] > $prices[$i - 1] > 0 ? $prices[$i] > $prices[$i - 1] : 0;
     }
-    return profit;
 }
 ```
 
@@ -312,19 +320,19 @@ Output: True
 
 题目描述：花朵之间至少需要一个单位的间隔。
 
-```java
-public boolean canPlaceFlowers(int[] flowerbed, int n) {
-    int cnt = 0;
-    for(int i = 0; i < flowerbed.length; i++){
-        if(flowerbed[i] == 1) continue;
-        int pre = i == 0 ? 0 : flowerbed[i - 1];
-        int next = i == flowerbed.length - 1 ? 0 : flowerbed[i + 1];
-        if(pre == 0 && next == 0) {
-            cnt++;
-            flowerbed[i] = 1;
+```php
+public function canPlaceFlowers($arr, $n)
+{
+    $max = 0;
+    for ($i = 0; $i < count($arr); $i++) {
+        $pre = !empty($arr[$i - 1]) ? $arr[$i - 1] : 0;
+        $next = !empty($arr[$i + 1]) ? $arr[$i + 1] : 0;
+        if ($arr[$i] == 0 && $pre == 0 && $next == 0) {
+            $max++;
+            $arr[$i] = 1;
         }
     }
-    return cnt >= n;
+    return $max >= $n;
 }
 ```
 
@@ -340,19 +348,24 @@ Explanation: You could modify the first 4 to 1 to get a non-decreasing array.
 
 题目描述：判断一个数组能不能只修改一个数就成为非递减数组。
 
-在出现 nums[i] < nums[i - 1] 时，需要考虑的是应该修改数组的哪个数，使得本次修改能使 i 之前的数组成为非递减数组，并且  **不影响后续的操作** 。优先考虑令 nums[i - 1] = nums[i]，因为如果修改 nums[i] = nums[i - 1] 的话，那么 nums[i] 这个数会变大，那么就有可能比 nums[i + 1] 大，从而影响了后续操作。还有一个比较特别的情况就是 nums[i] < nums[i - 2]，只修改 nums[i - 1] = nums[i] 不能令数组成为非递减，只能通过修改 nums[i] = nums[i - 1] 才行。
+情况一：[2,5,3,4]，当i=1时，array[i]=5，此时array[i-1]=2 < array[i+1]=3，则需修改“5”为“3”，即令array[i]=array[i+1]，则保证数组返回真；
+情况二：[4,5,3,7]，当i=1时，array[i]=5，此时array[i-1]=4 > array[i+1]=3，则需修改“3”为“5”，即令array[i+1]=array[i]，则保证数组返回真；
 
-```java
-public boolean checkPossibility(int[] nums) {
-    int cnt = 0;
-    for(int i = 1; i < nums.length; i++){
-        if(nums[i] < nums[i - 1]){
-            cnt++;
-            if(i - 2 >= 0 && nums[i - 2] > nums[i]) nums[i] = nums[i-1];
-            else nums[i - 1] = nums[i];
-        }
-    }
-    return cnt <= 1;
+```php
+public function checkPossibility($nums) 
+{
+      $cnt = 0;
+      for($i = 1; $i < count($nums) - 1 && $cnt <= 1; $i++){
+         if($nums[$i] > $nums[$i+1]) {
+            if($i-1 < 0 || $nums[$i-1] <= $nums[$i+1]) {
+               $nums[$i] = $nums[$i+1];
+            } else {
+               $nums[$i+1] = $nums[$i];
+            }
+            $cnt++;
+         }
+      }
+      return $cnt <= 1;
 }
 ```
 
@@ -363,6 +376,19 @@ public boolean checkPossibility(int[] nums) {
 ```html
 s = "abc", t = "ahbgdc"
 Return true.
+```
+
+```php
+public function isSubsequence($s, $t) 
+{
+     $tmp = -1;
+     for($i = 0; $i < strlen($s); $i++) {
+         $index = strpos($t, $s[$i], $tmp+1);
+         if($index === false) return false;
+         $tmp = $index;
+     }
+     return true;
+}
 ```
 
 ```java
@@ -469,16 +495,17 @@ Output: index1=1, index2=2
 
 如果两个指针指向元素的和 sum == target，那么得到要求的结果；如果 sum > target，移动较大的元素，使 sum 变小一些；如果 sum < target，移动较小的元素，使 sum 变大一些。
 
-```java
-public int[] twoSum(int[] numbers, int target) {
-    int i = 0, j = numbers.length - 1;
-    while (i < j) {
-        int sum = numbers[i] + numbers[j];
-        if (sum == target) return new int[]{i + 1, j + 1};
-        else if (sum < target) i++;
-        else j--;
+```php
+public function twoSum($numbers, $target) {
+    $i = 0;
+    $j = count(numbers) - 1;
+    while ($i < $j) {
+        $sum = numbers[$i] + numbers[$j];
+        if ($sum == $target) return [numbers[$i], numbers[$j]];
+        else if ($sum < $target) $i++;
+        else $j--;
     }
-    return null;
+    return [];
 }
 ```
 
@@ -496,26 +523,23 @@ Given s = "leetcode", return "leotcede".
 private HashSet<Character> vowels = new HashSet<>(Arrays.asList('a','e','i','o','u','A','E','I','O','U'));
 
 public String reverseVowels(String s) {
-    if(s.length() == 0) return s;
-    int i = 0, j = s.length() - 1;
-    char[] result = new char[s.length()];
-    while(i <= j){
-        char ci = s.charAt(i);
-        char cj = s.charAt(j);
-        if(!vowels.contains(ci)){
-            result[i] = ci;
-            i++;
-        } else if(!vowels.contains(cj)){
-            result[j] = cj;
-            j--;
-        } else{
-            result[i] = cj;
-            result[j] = ci;
-            i++;
-            j--;
+    $vowels = ['a', 'e', 'i', 'o', 'u'];
+    $i = 0;
+    $j = strlen($S) - 1;
+    while ($i < $j) {
+        if (!in_array($S[$i], $vowels)) {
+            $i++;
+        } else if (!in_array($S[$j], $vowels)) {
+            $j--;
+        } else {
+            $tmp = $S[$i];
+            $S[$i] = $S[$j];
+            $S[$j] = $tmp;
+            $i++;
+            $j--;
         }
     }
-    return new String(result);
+    return $S;
 }
 ```
 
@@ -531,14 +555,14 @@ Explanation: 1 * 1 + 2 * 2 = 5
 
 题目描述：判断一个数是否为两个数的平方和，例如 5 = 1<sup>2</sup> + 2<sup>2</sup>。
 
-```java
-public boolean judgeSquareSum(int c) {
-    int left = 0, right = (int) Math.sqrt(c);
-    while(left <= right){
-        int powSum = left * left + right * right;
-        if(powSum == c) return true;
-        else if(powSum > c) right--;
-        else left++;
+```php
+public function judgeSquareSum($c) {
+    $i = 1;
+    $j = $n - 1;
+    while ($i < $j) {
+        if ($i * $i + $j * $j == $n) return true;
+        else if ($i * $i + $j * $j > $n) $j--;
+        else $i++;
     }
     return false;
 }
