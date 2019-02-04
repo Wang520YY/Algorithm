@@ -824,6 +824,39 @@ public List<Integer> topKFrequent(int[] nums, int k) {
 [1,1,1,1],
 [1,0,1,1]]
 ```
+```php
+public function minPathLength($grids, $tr, $tc)
+{
+     $row = count($grids);
+     $column = count($grids[0]);
+     $queue = [0,0,1];
+     $girds[0][0] = 0;
+     while(!empty($queue)) {
+         $arr = array_shift($queue);
+         $x = $arr[0];
+         $y = $arr[1];
+         $len = $arr[2];
+         if($x = $tr && $y == $tc) return $len;
+         if(($x-1) >= 0 && $grids[$x-1][$y] == 1) {
+            array_push($queue, [$x-1, $y, $len+1]);
+            $grids[$x-1][$y] = 0;
+         }
+         if(($x+1) < $row && $grids[$x+1][$y] == 1) {
+            array_push($queue, [$x+1, $y, $len+1]);
+            $grids[$x+1][$y] = 0;
+         }
+         if(($y-1) >=0 && $grids[$x][$y-1] == 1) {
+            array_push($queue, [$x, $y-1, $len+1]);
+            $grids[$x][$y-1] = 0;
+         }
+         if(($y+1) < $column && $grids[$x][$y+1] == 1) {
+            array_push($queue, [$x, $y+1, $len+1]);
+            $girds[$x][$y+1] = 0;
+         }
+     }
+     return -1;
+}
+```
 
 ```java
 public int minPathLength(int[][] grids, int tr, int tc) {
