@@ -951,6 +951,39 @@ Explanation:The 0th and 1st students are direct friends, so they are in a friend
 The 2nd student himself is in a friend circle. So return 2.
 ```
 
+```
+public function maxAreaOfIsland($grid)
+{
+    $row = count($grid);
+    $column = count($grid[0]);
+    $max = 0;
+    for ($i = 0; $i < $row; $i++) {
+        for ($j = 0; $j < $column; $j++) {
+            if ($grid[$i][$j] == 1) {
+                $tmp = $this->dfs($grid, $i, $j ,$row, $column);
+                $max = $max < $tmp?
+                    $tmp : $max;
+            }
+        }
+    }
+    return $max;
+}
+
+public function dfs(&$grid, $i, $j, $row, $column)
+{
+    if ($i >= $row || $i < 0 || $j >= $column || $j < 0) {
+        return 0;
+    }
+    if ($grid[$i][$j] == 0) return 0;
+    $grid[$i][$j] = 0;
+    return
+        $this->dfs($grid, $i+1, $j, $row, $column) +
+        $this->dfs($grid, $i-1, $j, $row, $column) +
+        $this->dfs($grid, $i, $j+1, $row, $column) +
+        $this->dfs($grid, $i, $j-1, $row, $column) + 1;
+}
+```
+
 ```java
 public int findCircleNum(int[][] M) {
     int n = M.length;
